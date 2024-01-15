@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <audio id="start">
+        <source src="{{ url_for('static', filename='startup.mp3') }}" type="audio/mpeg">
+    </audio>
 </head>
 <style>
 .top-bar {
@@ -91,14 +94,54 @@ body {
         background-color: #fff;
         transition: 0.3s;
     }
-
+    #rheinando {
+        transition: all 2s;
+    }
+    .moveToCenter {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(5);
+    }
+    @keyframes spin {
+        0% { transform: translate(-50%, -50%) scale(5) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) scale(5) rotate(360deg); }
+    }
+    .spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(5);
+        animation: spin 0.5s linear infinite;
+    }
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        30% { transform: translate(3px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        70% { transform: translate(3px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    .shake {
+        animation: shake 0.5s;
+        animation-iteration-count: infinite;
+    }
     .col:hover {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        z-index: 3;
+        transform: translate(-50%, -50%) scale(5);
     }
 </style>
 <body>
     <div class="top-bar">
-        <img src="{{ url_for('static', filename='RHEINANDO.png') }}" alt="Rheinando Logo" width="180" height="60">
+        <img id="rheinando" src="{{ url_for('static', filename='RHEINANDO.png') }}" alt="Rheinando Logo" width="180" height="60">
         <span class="ygmw2">
             <div class="_1sMed _1wlHd _2cDMI" data-qa="flex">
                 <svg xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" fill="var(--xds-color-content-default)" viewBox="0 0 16 16" class="c-pieIcon c-pieIcon--office" width="24" height="24">
@@ -110,7 +153,24 @@ body {
                 
                 <span class="ygmw2"><div class="_1sMed _1wlHd _2cDMI" data-qa="flex"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" fill="var(--xds-color-content-default)" viewBox="0 0 16 16" class="c-pieIcon c-pieIcon--moped" width="24" height="24"><path d="M14.072 9.802a2.354 2.354 0 0 0-1.697-.682c.06-.31.06-.627 0-.936l-1.75-5.872A1.514 1.514 0 0 0 9.102 1.22H6.355L7.02 2.53h2.082a.228.228 0 0 1 .21.158l1.75 5.871a1.102 1.102 0 0 1-.559 1.296c-.152.076-.32.115-.49.113H8.63l-.7-2.503a1.54 1.54 0 0 0-1.487-1.164H2.75a1.54 1.54 0 0 0-1.531 1.532v3.447h1.33a2.354 2.354 0 0 0 .691 1.916 2.39 2.39 0 0 0 3.395 0 2.353 2.353 0 0 0 .691-1.916h2.625v.219a2.406 2.406 0 1 0 4.104-1.698h.018ZM5.708 12.27a1.094 1.094 0 0 1-1.818-.456 1.059 1.059 0 0 1-.02-.533h2.135a1.059 1.059 0 0 1-.298.989ZM2.53 9.969V7.834a.219.219 0 0 1 .219-.219h3.692a.236.236 0 0 1 .22.184l.603 2.17H2.531Zm10.614 2.301a1.103 1.103 0 0 1-1.54 0 1.094 1.094 0 1 1 1.54 0Z"></path></svg><div data-qa="util" style="margin-left: var(--xds-spacing-b);"><b class="rWs5G" data-qa="text" style="color: var(--xds-color-content-default);">Fahrer*in werden</b></div></div></span>
             </div>
-            <div class="_1sMed _1wlHd _2cDMI"  data-qa="header-country-and-language-selector"><div class="_1zAcs _3FPiw _5KCX" data-qa="dropdown-dialog"><div class="_2geFc" data-qa="click-away-listener"><div class="_3aZKM"><span class="_3I0XC _2q6ZP oMHlW" aria-label="Land oder Sprache wählen" tabindex="0" role="button" aria-live="polite" aria-busy="false" aria-atomic="true" aria-disabled="false" data-qa="header-country-and-language-selector-action-toggle"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" fill="currentColor" viewBox="0 0 16 16" class="c-pieIcon c-pieIcon--germany" width="24" height="24"><path fill="#FFDA44" d="M1.438 10.435a7.001 7.001 0 0 0 13.127 0L8 9.828l-6.563.607Z"></path><path fill="#333" d="M8.001 1a7.001 7.001 0 0 0-6.563 4.567L8 6.174l6.564-.607A7.001 7.001 0 0 0 8 1Z"></path><path fill="#D80027" d="M1.438 5.567a6.987 6.987 0 0 0 0 4.868h13.127a6.984 6.984 0 0 0 0-4.868H1.438Z"></path></svg></span></div><div></div></div></div></div>
+            <a href="{{ url_for('secretgame') }}">
+                <div class="_1sMed _1wlHd _2cDMI"  data-qa="header-country-and-language-selector">
+                    <div class="_1zAcs _3FPiw _5KCX" data-qa="dropdown-dialog">
+                        <div class="_2geFc" data-qa="click-away-listener">
+                            <div class="_3aZKM">
+                                <span class="_3I0XC _2q6ZP oMHlW" aria-label="Land oder Sprache wählen" tabindex="0" role="button" aria-live="polite" aria-busy="false" aria-atomic="true" aria-disabled="false" data-qa="header-country-and-language-selector-action-toggle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" fill="currentColor" viewBox="0 0 16 16" class="c-pieIcon c-pieIcon--germany" width="24" height="24">
+                                        <path fill="#FFDA44" d="M1.438 10.435a7.001 7.001 0 0 0 13.127 0L8 9.828l-6.563.607Z"></path>
+                                        <path fill="#333" d="M8.001 1a7.001 7.001 0 0 0-6.563 4.567L8 6.174l6.564-.607A7.001 7.001 0 0 0 8 1Z"></path>
+                                        <path fill="#D80027" d="M1.438 5.567a6.987 6.987 0 0 0 0 4.868h13.127a6.984 6.984 0 0 0 0-4.868H1.438Z"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
             <div class="_1sMed _1wlHd _2cDMI"  data-qa="header-menu-button"><span class="_3I0XC _2q6ZP oMHlW" aria-label="Mein Account" tabindex="0" role="button" aria-live="polite" aria-busy="false" aria-atomic="true" aria-disabled="false" data-qa="header-menu-button-element"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" fill="currentColor" viewBox="0 0 16 16" class="c-pieIcon c-pieIcon--menu" width="24" height="24"><path d="M15 4.281H1V2.97h14V4.28Zm0 7.438H1v1.312h14V11.72Zm0-4.375H1v1.312h14V7.344Z"></path></svg></span></div>
         </span>
     </div>
@@ -198,6 +258,25 @@ body {
                     document.getElementById('paypalEmail{{ loop.index }}').src = "{{ url_for('static', filename='') }}" + paypalEmail;
                     document.getElementById('paypalEmail{{ loop.index }}').alt = selectedOption.textContent;
                   });
+                  window.onload = function() {
+    var audio = document.getElementById("start");
+    audio.play();
+}
+document.getElementById("rheinando").addEventListener("click", function() {
+    // Start shaking the entire webpage
+    document.body.classList.add("shake");
+
+    // Start moving the image to the center
+    this.classList.add("moveToCenter");
+
+    // Play the audio
+    var audio = document.getElementById("start");
+    audio.play();
+
+
+    // Start spinning the image after it has moved to the center
+    setTimeout(() => this.classList.add("spin"), 2000);
+});
                   </script>
            
         

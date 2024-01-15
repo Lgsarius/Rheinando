@@ -77,7 +77,9 @@ def update_meal(meal_id):
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('update_meal.html', meal=meal)
-
+@app.route('/secretgame')
+def secretgame():
+    return render_template('secretgame.html')
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
